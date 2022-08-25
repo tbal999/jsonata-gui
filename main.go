@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"regexp"
 	"runtime"
@@ -30,7 +31,12 @@ func main() {
 
 	log.Println("booting up server...")
 
-	openBrowser("http://127.0.0.1:8050")
+	if len(os.Args) > 1 {
+		log.Println(os.Args[1])
+		if os.Args[1] == "web" {
+			openBrowser("http://127.0.0.1:8050")
+		}
+	}
 
 	http.ListenAndServe(":8050", nil)
 }
