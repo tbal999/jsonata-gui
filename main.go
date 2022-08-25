@@ -101,13 +101,17 @@ func jsonataRequest(w http.ResponseWriter, r *http.Request) {
 func processJsonata(input, jsonataString string) (output string) {
 	defer func() {
 		if r := recover(); r != nil {
-			output = fmt.Sprintf("%v", r)
+			output = fmt.Sprintf("jsonata error: %v", r)
 		}
 	}()
 
 	var dataToInterface interface{}
 
-	_ = json.Unmarshal([]byte(input), &dataToInterface)
+	err := json.Unmarshal([]byte(input), &dataToInterface)
+	if err != nil {
+		output = fmt.Sprintf("input json error: %v", err)
+		return
+	}
 
 	jsnt := replaceQuotesAndCommentsInPaths(jsonataString)
 
